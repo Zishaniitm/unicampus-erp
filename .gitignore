@@ -1,0 +1,58 @@
+# Dependencies
+node_modules/
+.pnp
+.pnp.js
+
+# Environment variables — NEVER commit these
+.env
+.env.local
+.env.*.local
+*.env
+
+# Build outputs
+dist/
+build/
+out/
+
+# Logs
+logs/
+*.log
+npm-debug.log*
+
+# Runtime data
+pids/
+*.pid
+*.seed
+
+# Coverage
+coverage/
+.nyc_output/
+
+# Testing
+playwright-report/
+test-results/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# MinIO / uploads (local dev)
+uploads/
+minio-data/
+
+# Playwright
+/e2e/playwright-report/
+/e2e/test-results/
+
+# k6
+load-tests/results/
+
+# Temp
+tmp/
+temp/

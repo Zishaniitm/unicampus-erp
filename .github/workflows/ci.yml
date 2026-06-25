@@ -1,0 +1,88 @@
+name: UniCampus ERP — CI
+
+on:
+  push:
+    branches: [main, develop]
+  pull_request:
+    branches: [main, develop]
+
+jobs:
+  backend-checks:
+    name: Backend — Lint + Test
+    runs-on: ubuntu-latest
+
+    services:
+      postgres:
+        image: postgres:14-alpine
+        env:
+          POSTGRES_USER: postgres
+          POSTGRES_PASSWORD: password
+          POSTGRES_DB: college_timetable_test_db
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: 'npm'
+          cache-dependency-path: backend/package-lock.json
+
+      - name: Install dependencies
+        working-directory: backend
+        run: npm ci
+        env:
+          PUPPETEER_SKIP_DOWNLOAD: true
+
+      - name: TypeScript type check
+        working-directory: backend
+        run: npm run lint
+
+      - name: Run unit tests with coverage
+        working-directory: backend
+        run: npm run test:unit -- --coverage
+        env:
+          NODE_ENV: test
+          DATABASE_TEST_URL: postgresql://postgres:password@localhost:5432/college_timetable_test_db
+          DATABASE_URL: postgresql://postgres:password@localhost:5432/college_timetable_test_db
+          JWT_ACCESS_SECRET: ci-test-access-secret-minimum-32-chars-ok
+          JWT_REFRESH_SECRET: ci-test-refresh-secret-minimum-32-chars-ok
+          ENCRYPTION_KEY: ci-test-encryption-key-minimum-32-chars
+          BCRYPT_ROUNDS: 4
+          COLLEGE_CODE: FUGS
+          COLLEGE_NAME: Test College
+          FRONTEND_URL: http://localhost:5173
+          TIMEZONE: Asia/Kolkata
+          ENABLE_SMS: false
+          ENABLE_EMAIL: false
+          ENABLE_ASYNC_EXPORTS: false
+          REDIS_URL: redis://localhost:6379
+
+      - name: Upload coverage report
+        uses: codecov/codecov-action@v4
+        if: always()
+        with:
+          directory: backend/coverage
+
+  security-check:
+    name: Security Audit
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Audit backend dependencies
+        working-directory: backend
+        run: npm audit --audit-level=high
+        env:
+          PUPPETEER_SKIP_DOWNLOAD: true
