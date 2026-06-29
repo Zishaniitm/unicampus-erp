@@ -1,0 +1,22 @@
+{
+  "name": "unicampus-erp-backend",
+  "version": "1.0.0",
+  "description": "UniCampus ERP Backend API — United Institute of Management (FUGS)",
+  "main": "dist/app.js",
+  "scripts": {
+    "dev": "ts-node-dev --respawn --transpile-only src/app.ts",
+    "build": "tsc",
+    "start": "node dist/app.js",
+    "test": "jest",
+    "test:watch": "jest --watch",
+    "test:coverage": "jest --coverage",
+    "test:integration": "jest --testPathPattern=tests/integration",
+    "test:unit": "jest --testPathPattern=tests/unit",
+    "db:migrate": "ts-node src/db/migrate.ts",
+    "lint": "tsc --noEmit"
+  },
+  "keywords": ["erp", "college", "management"],
+  "author": "Zishan Ahmad",
+  "license": "UNLICENSED",
+  "private": true
+}
