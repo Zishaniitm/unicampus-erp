@@ -15,8 +15,40 @@
     "db:migrate": "ts-node src/db/migrate.ts",
     "lint": "tsc --noEmit"
   },
-  "keywords": ["erp", "college", "management"],
+  "keywords": [
+    "erp",
+    "college",
+    "management"
+  ],
   "author": "Zishan Ahmad",
   "license": "UNLICENSED",
-  "private": true
+  "private": true,
+  "devDependencies": {
+    "@jest/globals": "^30.4.1",
+    "@types/bcrypt": "^6.0.0",
+    "@types/jest": "^30.0.0",
+    "@types/node": "^26.0.1",
+    "jest": "^30.4.2",
+    "ts-jest": "^29.4.11"
+  },
+  "dependencies": {
+    "bcrypt": "^6.0.0",
+    "bullmq": "^5.79.2",
+    "cookie-parser": "^1.4.7",
+    "cors": "^2.8.6",
+    "docx": "^9.7.1",
+    "dotenv": "^17.4.2",
+    "exceljs": "^4.4.0",
+    "express-rate-limit": "^8.5.2",
+    "helmet": "^8.2.0",
+    "ioredis": "^5.11.1",
+    "jsonwebtoken": "^9.0.3",
+    "minio": "^8.0.7",
+    "multer": "^2.2.0",
+    "nodemailer": "^9.0.1",
+    "razorpay": "^2.9.6",
+    "winston": "^3.19.0",
+    "winston-daily-rotate-file": "^5.0.0",
+    "zod": "^4.4.3"
+  }
 }

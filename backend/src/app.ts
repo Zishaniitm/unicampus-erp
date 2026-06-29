@@ -10,9 +10,11 @@ import { closeDb } from './db/index';
 
 // Route imports
 import authRoutes from './modules/auth/auth.routes';
+import studentRoutes from './modules/student/student.routes';
+import admissionRoutes from './modules/admission/admission.routes';
 // Future imports (add as modules are built):
-// import studentRoutes from './modules/student/student.routes';
-// import feeRoutes from './modules/fee/fee.routes';
+
+
 // ...
 
 const app = express();
@@ -64,7 +66,8 @@ app.get('/health', (_req, res) => {
 // ── API Routes ────────────────────────────────────────────────
 app.use('/api/v1/auth', authRoutes);
 // Add more routes here as modules are built:
-// app.use('/api/v1/students', studentRoutes);
+app.use('/api/v1/students', studentRoutes);
+app.use('/api/v1/admission', admissionRoutes);
 // app.use('/api/v1/fee', feeRoutes);
 // app.use('/api/v1/library', libraryRoutes);
 
