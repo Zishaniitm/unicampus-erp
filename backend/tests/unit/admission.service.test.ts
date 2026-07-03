@@ -84,7 +84,7 @@ describe('AdmissionService.generateCredentials', () => {
     );
     expect(updateCall).toBeDefined();
     const storedHash = updateCall[1][1]; // second param = password_hash
-    expect(storedHash).toMatch(/^\$2b\$/); // bcrypt hash prefix
+    expect(storedHash).toMatch(/^\$2[ab]\$/); // bcrypt hash prefix
     expect(storedHash).not.toBe(results[0].plaintext_password);
   });
 

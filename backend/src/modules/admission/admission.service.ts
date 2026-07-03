@@ -1,5 +1,5 @@
 import crypto from 'crypto';
-import bcrypt from 'bcrypt';
+import bcrypt from 'bcryptjs';
 import ExcelJS from 'exceljs';
 import { pool } from '../../db/index';
 import { AppError } from '../../middleware/error.middleware';

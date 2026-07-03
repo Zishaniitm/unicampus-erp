@@ -27,7 +27,7 @@ jest.mock('../../src/config/env', () => ({
   },
 }));
 
-import bcrypt from 'bcrypt';
+import bcrypt from 'bcryptjs';
 import { pool } from '../../src/db/index';
 import { AuthService } from '../../src/modules/auth/auth.service';
 import { AppError } from '../../src/middleware/error.middleware';
