@@ -1,20 +1,24 @@
 {
   "name": "unicampus-erp-backend",
   "version": "1.0.0",
-  "description": "UniCampus ERP Backend API — United Institute of Management (FUGS)",
+  "description": "UniCampus ERP Backend API \u2014 United Institute of Management (FUGS)",
   "main": "dist/app.js",
   "scripts": {
-    "dev":           "npx ts-node-dev --respawn --transpile-only --project tsconfig.json src/app.ts",
-    "build":         "npx tsc",
-    "start":         "node dist/app.js",
-    "test":          "npx jest",
-    "test:watch":    "npx jest --watch",
+    "dev": "npx ts-node-dev --respawn --transpile-only --project tsconfig.json src/app.ts",
+    "build": "npx tsc",
+    "start": "node dist/app.js",
+    "test": "npx jest",
+    "test:watch": "npx jest --watch",
     "test:coverage": "npx jest --coverage",
-    "test:unit":     "npx jest tests/unit/",
-    "db:migrate":    "npx ts-node --project tsconfig.json --transpile-only src/db/migrate.ts",
-    "lint":          "npx tsc --noEmit"
+    "test:unit": "npx jest tests/unit/",
+    "db:migrate": "npx ts-node --project tsconfig.json --transpile-only src/db/migrate.ts",
+    "lint": "npx tsc --noEmit"
   },
-  "keywords": ["erp", "college", "management"],
+  "keywords": [
+    "erp",
+    "college",
+    "management"
+  ],
   "author": "Zishan Ahmad",
   "license": "UNLICENSED",
   "private": true,
@@ -61,6 +65,7 @@
     "ts-jest": "29.1.4",
     "ts-node": "^10.9.2",
     "ts-node-dev": "^2.0.0",
-    "typescript": "^5.4.5"
+    "typescript": "^5.4.5",
+    "babel-jest": "29.7.0"
   }
 }
