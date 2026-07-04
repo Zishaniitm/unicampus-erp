@@ -1,4 +1,4 @@
-import bcrypt from 'bcrypt';
+import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
 import crypto from 'crypto';
 import { pool } from '../../db/index';
@@ -48,7 +48,7 @@ export class AuthService {
     // Intentionally generic error — never reveal whether username or password is wrong
     const invalidCredentialsError = new AppError(
       'ERR-AUTH-001',
-      'Invalid credentials. Please check your username and password.',
+      'Invalid credentials. Please try again.',
       401,
     );
 
