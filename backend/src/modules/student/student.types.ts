@@ -40,18 +40,6 @@ export const AdminUpdateStudentSchema = z.object({
   is_active:             z.boolean().optional(),
 });
 
-export const AcademicHoldSchema = z.object({
-  hold: z.boolean(),
-  reason: z.string().min(10, 'Provide a reason of at least 10 characters').when(
-    (val, ctx) => {
-      if (ctx.parent?.hold === true && !val) {
-        ctx.addIssue({ code: 'custom', message: 'Reason is required when placing a hold' });
-      }
-    }
-  ).optional(),
-});
-
-// Safer version without .when() for Zod v3
 export const SetAcademicHoldSchema = z.object({
   hold: z.boolean(),
   reason: z.string().min(10).optional(),
