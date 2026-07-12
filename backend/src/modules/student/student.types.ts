@@ -40,6 +40,7 @@ export const AdminUpdateStudentSchema = z.object({
   is_active:             z.boolean().optional(),
 });
 
+// SetAcademicHoldSchema — uses .refine() (Zod v3 compatible, no .when())
 export const SetAcademicHoldSchema = z.object({
   hold: z.boolean(),
   reason: z.string().min(10).optional(),
