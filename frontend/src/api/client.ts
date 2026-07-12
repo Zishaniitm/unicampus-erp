@@ -21,8 +21,12 @@ api.interceptors.response.use(
     const code    = error.response?.data?.error?.code
     const errorId = error.response?.data?.error?.error_id
 
-    if (status === 401 || code === 'ERR-AUTH-003') {
-      // Session expired — redirect to login
+    // Only redirect to login if NOT already on login/auth pages
+    const onAuthPage = window.location.pathname.startsWith('/login') ||
+                       window.location.pathname.startsWith('/change-password') ||
+                       window.location.pathname.startsWith('/forgot-password')
+
+    if ((status === 401 || code === 'ERR-AUTH-003') && !onAuthPage) {
       window.location.href = '/login'
       return Promise.reject(error)
     }

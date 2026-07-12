@@ -77,7 +77,7 @@ export default function App() {
 
   useEffect(() => {
     initialize()
-  }, [initialize])
+  }, [])
 
   return (
     <Routes>

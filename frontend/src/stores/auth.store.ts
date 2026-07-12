@@ -23,15 +23,17 @@ export const useAuthStore = create<AuthState>()(
        * If it is, populate the user store. If not, clear it.
        */
       initialize: async () => {
-        if (get().isInitialized) return
-        try {
-          const user = await authApi.me()
-          set({ user, isInitialized: true })
-        } catch {
-          // Session expired or no session — clear stored user
-          set({ user: null, isInitialized: true })
-        }
-      },
+  if (get().isInitialized) return
+  // Mark initialized FIRST to prevent any re-calls
+  set({ isInitialized: true })
+  try {
+    const user = await authApi.me()
+    set({ user })
+  } catch {
+    // No session — stay on login, don't loop
+    set({ user: null })
+  }
+},
 
       login: async (input: LoginInput) => {
         set({ isLoading: true })
