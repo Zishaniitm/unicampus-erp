@@ -116,11 +116,11 @@ describe('AttendanceService.editAttendance', () => {
 
 // ── STUDENT SUMMARY ─────────────────────────────────────────
 describe('AttendanceService.getStudentSummary', () => {
-  it('should throw ERR-STU-005 if student profile not found', async () => {
+  it('should return empty array if no student profile found (non-student roles)', async () => {
     (mockPool.query as jest.Mock).mockResolvedValueOnce({ rows: [] });
 
-    await expect(service.getStudentSummary('nonexistent-uuid'))
-      .rejects.toMatchObject({ code: 'ERR-STU-005', statusCode: 404 });
+    const result = await service.getStudentSummary('admin-uuid');
+    expect(result).toEqual([]);
   });
 
   it('should return subject-wise percentage data', async () => {

@@ -61,10 +61,10 @@ export function TimetablePage() {
           {[...Array(5)].map((_, i) => <Skeleton key={i} className="h-24 w-full rounded-xl" />)}
         </div>
       ) : error ? (
-        <div className="bg-red-50 border border-red-200 rounded-xl p-6 text-center">
-          <p className="text-danger font-medium">Could not load timetable</p>
-          <p className="text-sm text-gray-500 mt-1">Make sure the backend is running and timetable data exists.</p>
-        </div>
+  <div className="bg-white rounded-xl border border-gray-100 p-8 text-center">
+    <p className="text-gray-500 font-medium">No timetable data available</p>
+    <p className="text-sm text-gray-400 mt-1">Timetable entries will appear here once configured by HOD</p>
+  </div>
       ) : (
         <div className="space-y-3">
           {DAYS.map(day => {

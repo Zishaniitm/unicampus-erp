@@ -162,8 +162,9 @@ export class AttendanceService {
       [userId],
     );
 
+    // Non-student roles (admin, teacher, HOD etc.) have no student profile — return empty gracefully
     if (studentRows.length === 0) {
-      throw new AppError('ERR-STU-005', 'Student profile not found.', 404);
+      return [];
     }
 
     const studentId = studentRows[0].student_id;
