@@ -11,6 +11,9 @@ import { MarkAttendancePage }     from '@/pages/teacher/MarkAttendancePage'
 import { TeacherDashboardPage }   from '@/pages/teacher/TeacherDashboardPage'
 import { HodTimetablePage }       from '@/pages/hod/HodTimetablePage'
 import { HodAttendancePage }      from '@/pages/hod/HodAttendancePage'
+import { NoticesPage }            from '@/pages/shared/NoticesPage'
+import { GrievancePage }          from '@/pages/student/GrievancePage'
+import { GrievanceQueuePage }     from '@/pages/shared/GrievanceQueuePage'
 import type { Role } from '@/types/auth.types'
 
 // ── Protected Route ────────────────────────────────────────────
@@ -113,6 +116,27 @@ export default function App() {
       <Route path="/hod/attendance" element={
         <ProtectedRoute roles={['HOD','SUPER_ADMIN','PRINCIPAL']}>
           <HodAttendancePage />
+        </ProtectedRoute>
+      } />
+
+      {/* Notices — all authenticated roles */}
+      <Route path="/notices" element={
+        <ProtectedRoute>
+          <NoticesPage />
+        </ProtectedRoute>
+      } />
+
+      {/* Grievances — student submit/track */}
+      <Route path="/grievances" element={
+        <ProtectedRoute roles={['STUDENT']}>
+          <GrievancePage />
+        </ProtectedRoute>
+      } />
+
+      {/* Grievances — officer queue */}
+      <Route path="/grievances/queue" element={
+        <ProtectedRoute roles={['HOD','ACCOUNT_OFFICER','LIBRARIAN','STAFF','PRINCIPAL','SUPER_ADMIN']}>
+          <GrievanceQueuePage />
         </ProtectedRoute>
       } />
 
