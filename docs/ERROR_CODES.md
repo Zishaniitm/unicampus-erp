@@ -108,6 +108,13 @@
 |---|---|---|
 | ERR-GRIEV-001 | 404 | Grievance ticket not found |
 | ERR-GRIEV-002 | 422 | Cannot reopen a resolved grievance after 7 days |
+| ERR-GRIEV-003 | 422 | Grievance already resolved — status cannot change |
+
+## NOT — Notices
+
+| Code | HTTP | Description |
+|---|---|---|
+| ERR-NOT-001 | 404 | Notice not found or no longer active |
 
 ## EXP — Export / Reports
 

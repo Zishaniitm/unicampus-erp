@@ -17,6 +17,7 @@ import noticeRoutes     from './modules/notice/notice.routes';
 import feeRoutes        from './modules/fee/fee.routes';
 import attendanceRoutes from './modules/attendance/attendance.routes';
 import libraryRoutes    from './modules/library/library.routes';
+import grievanceRoutes  from './modules/grievance/grievance.routes';
 
 const app = express();
 
@@ -69,6 +70,7 @@ app.use('/api/v1/notices',    noticeRoutes);
 app.use('/api/v1/fee',        feeRoutes);        // stub — full impl Week 11
 app.use('/api/v1/attendance', attendanceRoutes); // stub — full impl Week 4
 app.use('/api/v1/library',    libraryRoutes);    // stub — full impl Week 15
+app.use('/api/v1/grievances', grievanceRoutes);  // Week 6
 
 // ── 404 handler ───────────────────────────────────────────────
 app.use((_req, res) => {
