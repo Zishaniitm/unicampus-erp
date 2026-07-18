@@ -16,7 +16,7 @@ export class TimetableService {
        WHERE s.user_id = $1 AND s.is_active = TRUE`,
       [userId],
     );
-    if (!sr.length) throw new AppError('ERR-STU-005', 'Student profile not found.', 404);
+    if (!sr.length) return { batch_name: null, academic_year: null, semester: null, entries: [], time_slots: [] };
     const { batch_id, batch_name, academic_year, semester } = sr[0];
 
     const { rows: tr } = await pool.query(
@@ -39,7 +39,7 @@ export class TimetableService {
       `SELECT teacher_id FROM teachers WHERE user_id = $1 AND is_active = TRUE`,
       [userId],
     );
-    if (!tr.length) throw new AppError('ERR-STU-005', 'Teacher profile not found.', 404);
+    if (!tr.length) return { entries: [] };
 
     const { rows } = await pool.query(
       `SELECT
