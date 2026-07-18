@@ -15,7 +15,7 @@ const router = Router();
 router.use(requireAuth);
 
 router.get('/my/summary',
-  requireRole(['STUDENT']),
+  requireRole(['STUDENT', 'SUPER_ADMIN', 'HOD', 'TEACHER', 'PRINCIPAL', 'ACCOUNT_OFFICER', 'STAFF', 'ADMISSION_STAFF', 'EXAM_CONTROLLER', 'LIBRARIAN']),
   attendanceController.getMySummary.bind(attendanceController),
 );
 

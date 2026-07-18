@@ -32,7 +32,13 @@ api.interceptors.response.use(
     }
 
     if (status === 403) {
-      toast.error('You do not have permission to perform this action.')
+      // Only show toast for user-initiated actions, not background widget queries
+      // Widget queries are identified by not having a specific user action context
+      const url = error.config?.url ?? ''
+      const isWidgetQuery = url.includes('/my/summary') || url.includes('/my/balance') || url.includes('/my/issued')
+      if (!isWidgetQuery) {
+        toast.error('You do not have permission to perform this action.')
+      }
       return Promise.reject(error)
     }
 

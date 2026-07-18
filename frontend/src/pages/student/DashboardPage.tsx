@@ -11,10 +11,15 @@ import type { AttendanceSummary } from '@/api/attendance.api'
 
 // ── Attendance Widget ──────────────────────────────────────────
 function AttendanceWidget() {
+  const { user } = useAuth()
+  const isStudent = user?.role === 'STUDENT'
+
   const { data, isLoading } = useQuery({
     queryKey: ['attendance', 'summary'],
     queryFn:  attendanceApi.getMySummary,
     staleTime: 5 * 60 * 1000,
+    enabled:  isStudent,  // only fetch for students
+    retry:    false,      // don't retry on 403
   })
 
   if (isLoading) return <SkeletonCard />
