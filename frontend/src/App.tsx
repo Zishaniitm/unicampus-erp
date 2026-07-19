@@ -14,6 +14,8 @@ import { HodAttendancePage }      from '@/pages/hod/HodAttendancePage'
 import { NoticesPage }            from '@/pages/shared/NoticesPage'
 import { GrievancePage }          from '@/pages/student/GrievancePage'
 import { GrievanceQueuePage }     from '@/pages/shared/GrievanceQueuePage'
+import { FeesPage }                from '@/pages/student/FeesPage'
+import { FeeManagementPage }       from '@/pages/shared/FeeManagementPage'
 import type { Role } from '@/types/auth.types'
 
 // ── Protected Route ────────────────────────────────────────────
@@ -137,6 +139,20 @@ export default function App() {
       <Route path="/grievances/queue" element={
         <ProtectedRoute roles={['HOD','ACCOUNT_OFFICER','LIBRARIAN','STAFF','PRINCIPAL','SUPER_ADMIN']}>
           <GrievanceQueuePage />
+        </ProtectedRoute>
+      } />
+
+      {/* Fees — student view */}
+      <Route path="/fees" element={
+        <ProtectedRoute roles={['STUDENT']}>
+          <FeesPage />
+        </ProtectedRoute>
+      } />
+
+      {/* Fees — officer administration */}
+      <Route path="/fees/manage" element={
+        <ProtectedRoute roles={['ACCOUNT_OFFICER','SUPER_ADMIN','PRINCIPAL']}>
+          <FeeManagementPage />
         </ProtectedRoute>
       } />
 

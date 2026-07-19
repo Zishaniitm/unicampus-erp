@@ -34,7 +34,12 @@ app.use(cors({
 }));
 
 // ── Body parsers ──────────────────────────────────────────────
-app.use(express.json({ limit: '10mb' }));
+// Capture the raw body so the Razorpay webhook can verify its HMAC-SHA256
+// signature over the exact bytes sent (re-serialized JSON would not match).
+app.use(express.json({
+  limit: '10mb',
+  verify: (req, _res, buf) => { (req as any).rawBody = buf.toString('utf8'); },
+}));
 app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
 
@@ -67,7 +72,7 @@ app.use('/api/v1/students',   studentRoutes);
 app.use('/api/v1/admission',  admissionRoutes);
 app.use('/api/v1/timetable',  timetableRoutes);
 app.use('/api/v1/notices',    noticeRoutes);
-app.use('/api/v1/fee',        feeRoutes);        // stub — full impl Week 11
+app.use('/api/v1/fee',        feeRoutes);        // Week 7
 app.use('/api/v1/attendance', attendanceRoutes); // stub — full impl Week 4
 app.use('/api/v1/library',    libraryRoutes);    // stub — full impl Week 15
 app.use('/api/v1/grievances', grievanceRoutes);  // Week 6
