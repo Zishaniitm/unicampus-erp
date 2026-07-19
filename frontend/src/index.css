@@ -8,6 +8,15 @@
   html {
     font-family: 'Inter', system-ui, sans-serif;
     -webkit-font-smoothing: antialiased;
+    color-scheme: light; /* stop browser dark-mode UA styles washing out form controls */
+  }
+
+  /* Form controls don't inherit body color — force readable text everywhere */
+  input, textarea, select {
+    @apply text-gray-900;
+  }
+  input::placeholder, textarea::placeholder {
+    @apply text-gray-400;
   }
 
   body {
