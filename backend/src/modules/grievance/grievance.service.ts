@@ -257,12 +257,12 @@ export class GrievanceService {
 
       await client.query(
         `UPDATE grievances
-         SET status = $1,
+         SET status = $1::text,
              assigned_to = COALESCE(assigned_to, $2),
-             resolution_notes = CASE WHEN $1 = 'resolved' THEN $3 ELSE resolution_notes END,
-             resolved_by      = CASE WHEN $1 = 'resolved' THEN $2 ELSE resolved_by END,
-             resolved_at      = CASE WHEN $1 = 'resolved' THEN NOW() ELSE resolved_at END,
-             escalated_at     = CASE WHEN $1 = 'escalated' THEN NOW() ELSE escalated_at END,
+             resolution_notes = CASE WHEN $1::text = 'resolved' THEN $3 ELSE resolution_notes END,
+             resolved_by      = CASE WHEN $1::text = 'resolved' THEN $2 ELSE resolved_by END,
+             resolved_at      = CASE WHEN $1::text = 'resolved' THEN NOW() ELSE resolved_at END,
+             escalated_at     = CASE WHEN $1::text = 'escalated' THEN NOW() ELSE escalated_at END,
              updated_at = NOW()
          WHERE grievance_id = $4`,
         [input.status, userId, input.resolution_notes ?? null, grievanceId],
