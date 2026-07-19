@@ -4,6 +4,7 @@ import { Badge } from '@/components/ui/Badge'
 import { formatTime, getTodayName } from '@/utils/format'
 import { useQuery } from '@tanstack/react-query'
 import { api } from '@/api/client'
+import { useAuth } from '@/hooks/useAuth'
 import { Download } from 'lucide-react'
 import { Button } from '@/components/ui/Button'
 import type { TimetableEntry } from '@/api/timetable.api'
@@ -19,17 +20,20 @@ interface TimeSlot {
 
 export function TimetablePage() {
   const today = getTodayName()
+  const { user } = useAuth()
+  // Teachers/HODs see their own teaching schedule; students see their batch timetable
+  const isTeacher = user?.role === 'TEACHER' || user?.role === 'HOD'
 
   const { data, isLoading, error } = useQuery({
-    queryKey: ['timetable', 'my'],
+    queryKey: ['timetable', isTeacher ? 'teacher-my' : 'my'],
     queryFn:  async () => {
-      const res = await api.get('/timetable/my')
+      const res = await api.get(isTeacher ? '/timetable/teacher/my' : '/timetable/my')
       return res.data.data as {
-        batch_name:    string
-        academic_year: string
-        semester:      number
-        entries:       TimetableEntry[]
-        time_slots:    TimeSlot[]
+        batch_name?:    string
+        academic_year?: string
+        semester?:      number
+        entries:        (TimetableEntry & { batch_name?: string })[]
+        time_slots?:    TimeSlot[]
       }
     },
   })
@@ -43,8 +47,8 @@ export function TimetablePage() {
     <PageShell title="Timetable">
       <div className="flex items-center justify-between mb-6">
         <div>
-          <h2 className="text-lg font-bold text-gray-900">Weekly Timetable</h2>
-          {data && (
+          <h2 className="text-lg font-bold text-gray-900">{isTeacher ? 'My Teaching Schedule' : 'Weekly Timetable'}</h2>
+          {data?.batch_name && (
             <p className="text-sm text-gray-500">
               {data.batch_name} · Semester {data.semester} · {data.academic_year}
             </p>
