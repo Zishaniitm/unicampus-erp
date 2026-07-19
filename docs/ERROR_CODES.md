@@ -49,7 +49,9 @@
 | ERR-FEE-004 | 422 | Fee dues block active |
 | ERR-FEE-005 | 400 | Razorpay webhook signature mismatch (tampered request) |
 | ERR-FEE-006 | 409 | Duplicate payment order (idempotency) |
-| ERR-FEE-007 | 404 | Fee head not found |
+| ERR-FEE-007 | 404 | Fee head or assignment not found |
+| ERR-FEE-008 | 422 | Duplicate fee head code |
+| ERR-FEE-009 | 422 | Concession exceeds the assigned fee amount |
 
 ## LIB — Library
 

@@ -5,6 +5,33 @@ Format: `## [version] — YYYY-MM-DD` with sections: Added, Changed, Fixed, Secu
 
 ---
 
+---
+
+## [0.7.0] — 2026-07-19 (Week 7 — Fee Management)
+
+### Added
+- **Migration 016** — `fee_heads`, `fee_assignments`, `fee_concessions`, `fee_transactions`, `fee_ledger`, `fee_receipt_seq`. All money stored in **paise** (INTEGER) to avoid float rounding.
+- **Fee module** (`backend/src/modules/fee/`) — full fee lifecycle per SRS 3.4:
+  - Student self-service: balance breakdown, ledger, transaction history, initiate online payment
+  - `calculateFeeBalance()` pure function (SRS Section 9) — gross/concession/net/paid/fine/due; concessions capped at charged amount; late fine accrues from `due_date + 1`, gated by oldest-due-first payment allocation; balance clamped at zero
+  - Account Officer: create fee heads, assign heads to a batch (posts DEBIT ledger lines to every active student), grant concessions (CREDIT), record offline payments (cash/cheque/DD → receipt `RCP-<year>-<6-digit>`), view any student's ledger
+  - **Razorpay integration** — order creation + webhook confirmation. Payments confirmed **only** on signature-verified webhook (`verifyRazorpayWebhookSignature`, HMAC-SHA256, constant-time compare); `razorpay_order_id` is the idempotency key so duplicate webhooks never double-post (row-locked `FOR UPDATE`)
+- **Razorpay util** (`backend/src/utils/razorpay.ts`) — webhook + payment signature verification, lazy SDK client, order creation
+- **Frontend** — `FeesPage` (student: balance cards, ledger, payment history, pay-online modal with graceful fallback when gateway unconfigured), `FeeManagementPage` (officer: fee heads, batch assignment, concessions, offline payments, student ledger lookup)
+- **API client** — `fee.api.ts` with `formatPaise()` helper
+- Routes wired in `App.tsx` (`/fees` student, `/fees/manage` officer); Sidebar split by role
+- `frontend/src/vite-env.d.ts` — Vite env typings (was missing)
+- `backend/tests/unit/fee.service.test.ts` — 18 tests: balance calc (concession cap, fine accrual, payment gating, overpayment clamp) + Razorpay signature verification
+
+### Security
+- Online payments never trusted on client redirect — only via webhook with verified HMAC signature (ERR-FEE-005 on mismatch)
+- Idempotent payment posting via `razorpay_order_id` + `FOR UPDATE` row lock (ERR-FEE-006 territory)
+- Raw request body captured in `app.ts` (`express.json` verify hook) so webhook signatures verify against exact bytes
+
+### Migration Notes
+- Run migration `016_fee_module.sql` before deploying this version
+- Set `RAZORPAY_KEY_ID`, `RAZORPAY_KEY_SECRET`, `RAZORPAY_WEBHOOK_SECRET` (backend) and `VITE_RAZORPAY_KEY_ID` (frontend) to enable live online payments; offline payments and balance tracking work without them
+
 ## [0.6.0] — 2026-07-18 (Week 6 — Notices + Grievances)
 
 ### Added
