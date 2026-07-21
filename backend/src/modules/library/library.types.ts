@@ -33,17 +33,18 @@ export const IssueBookSchema = z.object({
 });
 
 export const ReturnBookSchema = z.object({
-  issue_id: z.number().int().positive(),
+  // BIGSERIAL issue ids arrive as strings from the pg driver — coerce
+  issue_id: z.coerce.number().int().positive(),
   /** Mark as lost instead of returned (fine handled separately) */
   lost:     z.boolean().optional().default(false),
 });
 
 export const PayFineSchema = z.object({
-  fine_id: z.number().int().positive(),
+  fine_id: z.coerce.number().int().positive(),
 });
 
 export const WaiveFineSchema = z.object({
-  fine_id: z.number().int().positive(),
+  fine_id: z.coerce.number().int().positive(),
   reason:  z.string().min(5).max(500),
 });
 

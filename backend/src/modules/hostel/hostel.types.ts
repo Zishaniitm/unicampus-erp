@@ -14,7 +14,8 @@ export const ApplyHostelSchema = z.object({
 });
 
 export const DecideRegistrationSchema = z.object({
-  registration_id: z.number().int().positive(),
+  // BIGSERIAL ids arrive as strings from the pg driver — coerce
+  registration_id: z.coerce.number().int().positive(),
   decision:        z.enum(['approved', 'rejected']),
   remarks:         z.string().max(500).optional(),
 }).refine(d => d.decision !== 'rejected' || (d.remarks && d.remarks.trim().length >= 5), {
