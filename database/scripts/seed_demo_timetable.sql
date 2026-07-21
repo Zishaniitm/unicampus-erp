@@ -90,9 +90,9 @@ WHERE NOT EXISTS (SELECT 1 FROM timetables t WHERE t.batch_id = b.batch_id AND t
 INSERT INTO timetable_entries (timetable_id, day_of_week, time_slot_id, batch_course_id, classroom_id, teacher_id)
 SELECT tt.timetable_id,
        e.dow::day_of_week,
-       (SELECT time_slot_id FROM time_slots WHERE slot_name = e.slot),
+       (SELECT time_slot_id FROM time_slots WHERE slot_name = e.slot ORDER BY time_slot_id LIMIT 1),
        bc.batch_course_id,
-       (SELECT classroom_id FROM classrooms WHERE classroom_name = e.room),
+       (SELECT classroom_id FROM classrooms WHERE classroom_name = e.room ORDER BY classroom_id LIMIT 1),
        tc.teacher_id
 FROM (VALUES
   -- CS-2024-1-A: 6 classes across the week
@@ -120,7 +120,7 @@ WHERE NOT EXISTS (
   SELECT 1 FROM timetable_entries x
   WHERE x.timetable_id = tt.timetable_id
     AND x.day_of_week  = e.dow::day_of_week
-    AND x.time_slot_id = (SELECT time_slot_id FROM time_slots WHERE slot_name = e.slot)
+    AND x.time_slot_id = (SELECT time_slot_id FROM time_slots WHERE slot_name = e.slot ORDER BY time_slot_id LIMIT 1)
 );
 
 \echo '=== 8. Attendance — past 3 weeks, ~1 in 5 absent ==='
