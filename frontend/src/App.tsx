@@ -16,6 +16,8 @@ import { GrievancePage }          from '@/pages/student/GrievancePage'
 import { GrievanceQueuePage }     from '@/pages/shared/GrievanceQueuePage'
 import { FeesPage }                from '@/pages/student/FeesPage'
 import { FeeManagementPage }       from '@/pages/shared/FeeManagementPage'
+import { LibraryPage }             from '@/pages/student/LibraryPage'
+import { LibraryManagementPage }   from '@/pages/shared/LibraryManagementPage'
 import type { Role } from '@/types/auth.types'
 
 // ── Protected Route ────────────────────────────────────────────
@@ -153,6 +155,20 @@ export default function App() {
       <Route path="/fees/manage" element={
         <ProtectedRoute roles={['ACCOUNT_OFFICER','SUPER_ADMIN','PRINCIPAL']}>
           <FeeManagementPage />
+        </ProtectedRoute>
+      } />
+
+      {/* Library — student catalogue + own issues */}
+      <Route path="/library" element={
+        <ProtectedRoute roles={['STUDENT']}>
+          <LibraryPage />
+        </ProtectedRoute>
+      } />
+
+      {/* Library — librarian administration */}
+      <Route path="/library/manage" element={
+        <ProtectedRoute roles={['LIBRARIAN','SUPER_ADMIN','PRINCIPAL']}>
+          <LibraryManagementPage />
         </ProtectedRoute>
       } />
 

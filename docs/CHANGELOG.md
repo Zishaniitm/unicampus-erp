@@ -7,6 +7,28 @@ Format: `## [version] — YYYY-MM-DD` with sections: Added, Changed, Fixed, Secu
 
 ---
 
+---
+
+## [0.8.0] — 2026-07-19 (Week 8 — Library)
+
+### Added
+- **Migration 018** — `library_books` (catalogue with copy tracking + full-text index), `library_issues` (issue/return/lost lifecycle), `library_fines` (paise, waivable). `available_copies <= total_copies` enforced by CHECK.
+- **Library module** (`backend/src/modules/library/`) replaces the Week 3 stub:
+  - `calculateLibraryFine()` pure function (SRS Section 9) — fine from due_date + 1 (grace day), holiday-aware, never negative — 15 unit tests
+  - Issue rules: no copies → ERR-LIB-001, max 3 books out → ERR-LIB-004, unpaid fines ≥ ₹100 → ERR-LIB-002; book row locked `FOR UPDATE` so the last copy can't double-issue
+  - Return flow: copies restored (not on lost), overdue fine row auto-created, all in one transaction
+  - Fines: pay at counter or waive with mandatory reason (both audited)
+  - Student self-service: own issues with live fine estimates; searchable catalogue for all roles
+- **Frontend** — `LibraryPage` (student: my books with overdue badges + fine estimates, searchable catalogue), `LibraryManagementPage` (librarian: issued/overdue tabs, one-click return with fine toast, add book, issue modal with friendly error mapping)
+- **Demo seed** (`database/scripts/seed_demo_timetable.sql`) — teachers, courses, time slots, weekly timetables for all batches, 3 weeks of attendance, and `librarian1` / `accounts1` users (password123)
+- Routes `/library` (student) + `/library/manage` (librarian/admin); Sidebar split by role
+
+### Fixed
+- Grievance status update crashed on real Postgres (`inconsistent types deduced for parameter $1`) — added explicit `::text` casts (Error IDs 1bfbc521, 6a9da199)
+- **Migration 017** — dropped broken `log_user_action()` audit triggers that cast `current_user::uuid` and crashed every INSERT into departments/courses/teachers/students/timetables (root cause of the original sample-data seeding failure)
+- Teacher/HOD Timetable page called the student-only endpoint → 403 loop; now routes to `/timetable/teacher/my`
+- Form text invisible in dark-mode browsers — global `color-scheme: light` + explicit text color on inputs/textareas/selects
+
 ## [0.7.0] — 2026-07-19 (Week 7 — Fee Management)
 
 ### Added

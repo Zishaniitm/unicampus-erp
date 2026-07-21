@@ -82,15 +82,19 @@ function FeeCard() {
     queryKey: ['fee', 'balance'],
     queryFn:  async () => {
       const res = await api.get('/fee/my/balance')
-      return res.data.data as { balance_due: number; fine_accrued: number; last_payment_date: string | null }
+      // Week 7 shape — all figures in paise
+      return res.data.data as {
+        net_payable_paise: number; paid_paise: number
+        fine_paise: number; balance_due_paise: number
+      }
     },
   })
 
   if (isLoading) return <SkeletonCard />
 
-  const due   = data?.balance_due  ?? 0
-  const fine  = data?.fine_accrued ?? 0
-  const total = due + fine
+  const due   = (data?.balance_due_paise ?? 0) / 100
+  const fine  = (data?.fine_paise ?? 0) / 100
+  const total = due               // balance_due already includes fine
   const hasdue = total > 0
 
   return (
@@ -106,7 +110,7 @@ function FeeCard() {
         <>
           <p className="text-2xl font-bold text-danger">{formatCurrency(total)}</p>
           <p className="text-xs text-gray-500 mt-0.5">
-            Fees: {formatCurrency(due)} + Fine: {formatCurrency(fine)}
+            Fees: {formatCurrency(total - fine)} + Fine: {formatCurrency(fine)}
           </p>
           <a href="/fees" className="mt-3 inline-flex items-center px-4 py-1.5 bg-danger text-white text-sm font-medium rounded-lg hover:bg-red-700 transition-colors">
             Pay Now →
@@ -222,11 +226,20 @@ function LibraryCard() {
     queryKey: ['library', 'my'],
     queryFn:  async () => {
       const res = await api.get('/library/my/issued')
-      return res.data.data as Array<{ title: string; due_date: string; days_left: number }>
+      // Week 8 shape: { issues: [...], unpaid_fines_paise }
+      return res.data.data as {
+        issues: Array<{ title: string; due_date: string; status: string; overdue: boolean }>
+        unpaid_fines_paise: number
+      }
     },
   })
 
-  const issued = data ?? []
+  const issued = (data?.issues ?? []).filter(i => i.status === 'issued')
+
+  const daysLeft = (dueDate: string) => {
+    const MS = 86_400_000
+    return Math.floor((new Date(dueDate).getTime() - Date.now()) / MS) + 1
+  }
 
   return (
     <div className="bg-white rounded-xl p-5 shadow-sm border border-gray-100 h-full">
@@ -241,14 +254,17 @@ function LibraryCard() {
         <p className="text-sm text-gray-400">No books currently issued</p>
       ) : (
         <ul className="space-y-2">
-          {issued.map((b, i) => (
-            <li key={i} className="text-sm">
-              <p className="text-gray-800 truncate font-medium">{b.title}</p>
-              <p className={`text-xs ${b.days_left <= 2 ? 'text-danger' : 'text-gray-400'}`}>
-                {b.days_left <= 0 ? `Overdue by ${Math.abs(b.days_left)} days` : `Due in ${b.days_left} days`}
-              </p>
-            </li>
-          ))}
+          {issued.map((b, i) => {
+            const left = daysLeft(b.due_date)
+            return (
+              <li key={i} className="text-sm">
+                <p className="text-gray-800 truncate font-medium">{b.title}</p>
+                <p className={`text-xs ${left <= 2 ? 'text-danger' : 'text-gray-400'}`}>
+                  {left <= 0 ? `Overdue by ${Math.abs(left)} day${Math.abs(left) === 1 ? '' : 's'}` : `Due in ${left} day${left === 1 ? '' : 's'}`}
+                </p>
+              </li>
+            )
+          })}
         </ul>
       )}
     </div>
