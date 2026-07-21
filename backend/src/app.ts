@@ -18,6 +18,8 @@ import feeRoutes        from './modules/fee/fee.routes';
 import attendanceRoutes from './modules/attendance/attendance.routes';
 import libraryRoutes    from './modules/library/library.routes';
 import grievanceRoutes  from './modules/grievance/grievance.routes';
+import hostelRoutes     from './modules/hostel/hostel.routes';
+import busRoutes        from './modules/bus/bus.routes';
 
 const app = express();
 
@@ -76,6 +78,8 @@ app.use('/api/v1/fee',        feeRoutes);        // Week 7
 app.use('/api/v1/attendance', attendanceRoutes); // stub — full impl Week 4
 app.use('/api/v1/library',    libraryRoutes);    // stub — full impl Week 15
 app.use('/api/v1/grievances', grievanceRoutes);  // Week 6
+app.use('/api/v1/hostel',     hostelRoutes);     // Week 9
+app.use('/api/v1/bus',        busRoutes);        // Week 9
 
 // ── 404 handler ───────────────────────────────────────────────
 app.use((_req, res) => {

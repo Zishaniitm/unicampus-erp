@@ -18,6 +18,8 @@ import { FeesPage }                from '@/pages/student/FeesPage'
 import { FeeManagementPage }       from '@/pages/shared/FeeManagementPage'
 import { LibraryPage }             from '@/pages/student/LibraryPage'
 import { LibraryManagementPage }   from '@/pages/shared/LibraryManagementPage'
+import { HostelBusPage }           from '@/pages/student/HostelBusPage'
+import { HostelBusManagementPage } from '@/pages/shared/HostelBusManagementPage'
 import type { Role } from '@/types/auth.types'
 
 // ── Protected Route ────────────────────────────────────────────
@@ -169,6 +171,25 @@ export default function App() {
       <Route path="/library/manage" element={
         <ProtectedRoute roles={['LIBRARIAN','SUPER_ADMIN','PRINCIPAL']}>
           <LibraryManagementPage />
+        </ProtectedRoute>
+      } />
+
+      {/* Hostel & Bus — student registration */}
+      <Route path="/hostel" element={
+        <ProtectedRoute roles={['STUDENT']}>
+          <HostelBusPage mode="hostel" />
+        </ProtectedRoute>
+      } />
+      <Route path="/bus" element={
+        <ProtectedRoute roles={['STUDENT']}>
+          <HostelBusPage mode="bus" />
+        </ProtectedRoute>
+      } />
+
+      {/* Hostel & Bus — staff administration */}
+      <Route path="/hostel-bus/manage" element={
+        <ProtectedRoute roles={['STAFF','SUPER_ADMIN']}>
+          <HostelBusManagementPage />
         </ProtectedRoute>
       } />
 

@@ -9,6 +9,22 @@ Format: `## [version] — YYYY-MM-DD` with sections: Added, Changed, Fixed, Secu
 
 ---
 
+---
+
+## [0.9.0] — 2026-07-20 (Week 9 — Hostel & Bus Registrations)
+
+### Added
+- **Migration 020** — `registration_windows` (shared hostel/bus/semester open-close windows), `hostel_categories`, `hostel_registrations`, `bus_routes` (stops as JSONB), `bus_registrations`. One live registration per student per year enforced via partial unique indexes.
+- **`isRegistrationWindowOpen()`** (SRS Section 9 mandatory) + `currentAcademicYear()` IST helper — 12 unit tests, server-side time only
+- **Hostel module** (`backend/src/modules/hostel/`) — categories with live occupancy, student apply (window check ERR-HST-001, capacity with `FOR UPDATE` lock ERR-HST-002, one-per-year ERR-HST-003), staff approve/reject queue (reason mandatory on reject), Super Admin window management for all three registration types
+- **Bus module** (`backend/src/modules/bus/`) — routes with ordered JSONB stops, student apply with stop validation (ERR-BUS-001/002), same capacity + approval flow
+- **Frontend** — `HostelBusPage` (student, shared component for both modes: window status banner, apply modals, registration status cards with rejection reasons, live availability listing), `HostelBusManagementPage` (staff: tabbed hostel/bus pending queues with approve/reject, create category/route, Super Admin window setter)
+- Routes `/hostel`, `/bus` (student), `/hostel-bus/manage` (staff); Sidebar split by role
+
+### Migration Notes
+- Run migration `020_hostel_bus.sql` before deploying
+- Super Admin must set hostel/bus windows (Hostel & Bus Mgmt → Windows) before students can apply
+
 ## [0.8.0] — 2026-07-19 (Week 8 — Library)
 
 ### Added
